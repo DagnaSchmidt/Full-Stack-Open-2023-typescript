@@ -1,9 +1,11 @@
+type Description = 'bad' | 'medium' | 'good';
+type Rating = 1 | 2 | 3;
 interface Result {
     periodLength: number,
     trainingDays: number,
     success: boolean,
-    rating: number,
-    ratingDescription: string,
+    rating: Rating,
+    ratingDescription: Description,
     target: number,
     average: number
 }
@@ -21,13 +23,33 @@ const calculateExercise = (trainingHours: Array<number>): Result => {
     const allHours = trainingHours.reduce((a, b) => a + b);
     const average = allHours/periodLength;
 
+    const rating = (): Rating => {
+        if(allHours/periodLength >= 2){
+            return 3
+        }else if(allHours/periodLength < 2 && allHours/periodLength > 1){
+            return 2
+        }else{
+            return 1
+        }
+    }
+
+    const ratingDescription = (): Description => {
+        if(rating() === 3){
+            return 'good'
+        }else if(rating() === 2){
+            return 'medium'
+        }else{
+            return 'bad'
+        }
+    }
+
      return {
         periodLength: periodLength,
         trainingDays: trainingDays.length,
         success: success(),
-        rating: 0,
-        ratingDescription: 'string',
-        target: 0,
+        rating: rating(),
+        ratingDescription: ratingDescription(),
+        target: 2,
         average: average
      }
 }
